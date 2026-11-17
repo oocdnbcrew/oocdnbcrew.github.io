@@ -48,6 +48,9 @@ SEITE = '''<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <meta name="robots" content="noindex">
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://script.googleusercontent.com">
+<link rel="dns-prefetch" href="https://lh3.googleusercontent.com">
 <title>%(titel)s</title>
 <meta property="og:title" content="%(titel)s">
 <meta property="og:image" content="https://oocdnbcrew.github.io/icon.jpg">
