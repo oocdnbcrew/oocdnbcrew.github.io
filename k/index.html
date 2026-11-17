@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<title>OoC Getränke</title>
+<link rel="icon" href="../icon.jpg">
+<link rel="apple-touch-icon" href="../icon.jpg">
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: #000; }
+</style>
+</head>
+<body>
+<!-- Out of Control: Hülle um die Google-Web-App (ohne den Google-Hinweisbalken). Inhalt + Daten kommen weiter von Google. -->
+<iframe id="app" title="OoC Getränke" allow="clipboard-read; clipboard-write; camera; microphone; fullscreen; web-share" allowfullscreen></iframe>
+<script>
+  var q = location.search.replace(/^\?/, '').replace(/(^|&)h=1(?=&|$)/g, '').replace(/^&/, '');
+  document.getElementById('app').src = 'https://script.google.com/macros/s/AKfycbwK4-FEERWvd1Cl60Jf-xxvhFnpdp99utJSITKwSqn7WCsE-QO1Qe26vRXTneKgNMM_/exec?' + (q ? q + '&' : '') + 'h=1' + location.hash;
+</script>
+</body>
+</html>
