@@ -69,6 +69,12 @@ SEITE = '''<!doctype html>
   var q = location.search.replace(/^\\?/, '').replace(/(^|&)h=1(?=&|$)/g, '').replace(/^&/, '');
   var alle = [fest, q, 'h=1'].filter(function (x) { return x; }).join('&');
   document.getElementById('app').src = '%(exec)s?' + alle + location.hash;
+  // 18.11.2026: Runterziehen in der App -> Nachricht -> ganze Seite neu laden (wie Chrome-Aktualisieren)
+  window.addEventListener('message', function (e) {
+    var o = String(e.origin || '');
+    if (o.slice(-22) !== '.googleusercontent.com' && o !== 'https://script.google.com') return;
+    if (e.data && e.data.ooc === 'neuladen') location.reload();
+  });
 </script>
 </body>
 </html>
