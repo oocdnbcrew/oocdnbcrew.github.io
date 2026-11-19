@@ -76,6 +76,11 @@ SEITE = '''<!doctype html>
     var o = String(e.origin || '');
     if (o.slice(-22) !== '.googleusercontent.com' && o !== 'https://script.google.com') return;
     if (e.data && e.data.ooc === 'neuladen') location.reload();
+    // 19.11.2026: App bittet nach einem Tipp um Vollbild (Adressleiste weg) – z. B. Eingang an der Kasse
+    if (e.data && e.data.ooc === 'vollbild' && !document.fullscreenElement) {
+      var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen;
+      if (f) try { var p = f.call(d, { navigationUI: 'hide' }); if (p && p.catch) p.catch(function () {}); } catch (er) {}
+    }
   });
 </script>
 </body>
