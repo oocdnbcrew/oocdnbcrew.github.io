@@ -30,6 +30,7 @@ SEITEN = {
   'volunteers':          ('L', 'helfer=alle', 'Out of Control – Volunteers'),
   'volunteers-admin':    ('L', 'vol=1', 'OoC Volunteers'),
   'blacklist':           ('L', 'hv=1', 'OoC Hausverbot'),
+  'eingang':             ('L', 'eg=1', 'OoC Eingang'),   # Mike 19.11.: Gästeliste abhaken + Hausverbot (Code kommt per ?k=)
   'volunteer-events':    ('L', 'helfer=gruppe-andere', 'Out of Control – Volunteers'),
   'volunteer-kabelsalat':('L', 'helfer=gruppe-kabelsalat', 'Kabelsalat – Volunteers'),
   'volunteer-openair':   ('L', 'helfer=gruppe-openair', 'Out of Control – Volunteers'),
