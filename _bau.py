@@ -29,6 +29,7 @@ SEITEN = {
   'promoters-worldwide': ('L', 'vs=1', 'OoC Veranstalter'),
   'volunteers':          ('L', 'helfer=alle', 'Out of Control – Volunteers'),
   'volunteers-admin':    ('L', 'vol=1', 'OoC Volunteers'),
+  'blacklist':           ('L', 'hv=1', 'OoC Hausverbot'),
   'volunteer-events':    ('L', 'helfer=gruppe-andere', 'Out of Control – Volunteers'),
   'volunteer-kabelsalat':('L', 'helfer=gruppe-kabelsalat', 'Kabelsalat – Volunteers'),
   'volunteer-openair':   ('L', 'helfer=gruppe-openair', 'Out of Control – Volunteers'),
