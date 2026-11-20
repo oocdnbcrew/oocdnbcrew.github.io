@@ -43,6 +43,20 @@ SEITEN = {
   'picture-gallery':     ('F', 'galerie=1', 'Out of Control – Gallery'),
   'photo-admin':         ('F', 'admin=1', 'Foto-Admin'),
 }
+# 20.11.2026 (Mike): Bildschirm bleibt an (kein Standby) bei Eingang, Theken und Nachfüller/Getränke-Admin.
+# Muss in der OBERSTEN Seite passieren – im Google-Rahmen blockiert der Browser die Bildschirmsperre.
+WACH = {'eingang', 'drinks-manager', 'drinks-bar-1', 'drinks-bar-2', 'drinks-bar-3', 'k'}
+WACH_JS = '''
+  // Bildschirm anlassen (Screen Wake Lock): beim Laden, nach jedem Zurückkommen auf die Seite und alle 15 s neu versuchen
+  var WL = null;
+  function wachHalten() {
+    try { if ('wakeLock' in navigator && !WL && document.visibilityState === 'visible')
+      navigator.wakeLock.request('screen').then(function (l) { WL = l; l.addEventListener('release', function () { WL = null; }); }).catch(function () {}); } catch (e) {}
+  }
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') wachHalten(); });
+  window.addEventListener('focus', wachHalten); window.addEventListener('pointerdown', wachHalten, true);
+  wachHalten(); setInterval(wachHalten, 15000);
+'''
 SEITE = '''<!doctype html>
 <html lang="de">
 <head>
@@ -81,7 +95,7 @@ SEITE = '''<!doctype html>
       var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen;
       if (f) try { var p = f.call(d, { navigationUI: 'hide' }); if (p && p.catch) p.catch(function () {}); } catch (er) {}
     }
-  });
+  });%(wach)s
 </script>
 </body>
 </html>
@@ -89,7 +103,7 @@ SEITE = '''<!doctype html>
 for pfad, (app, fest, titel) in SEITEN.items():
     ordner = D + pfad + ('/' if pfad else '')
     os.makedirs(ordner, exist_ok=True)
-    io.open(ordner + 'index.html', 'w', encoding='utf-8', newline='\n').write(SEITE % {'titel': titel, 'fest': fest, 'exec': EXEC[app]})
+    io.open(ordner + 'index.html', 'w', encoding='utf-8', newline='\n').write(SEITE % {'titel': titel, 'fest': fest, 'exec': EXEC[app], 'wach': WACH_JS if pfad in WACH else ''})
 io.open(D + '404.html', 'w', encoding='utf-8', newline='\n').write(
   '<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Out of Control</title>'
   '<meta http-equiv="refresh" content="0; url=/"></head><body style="background:#000"></body></html>\n')

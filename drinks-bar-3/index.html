@@ -37,6 +37,16 @@
       if (f) try { var p = f.call(d, { navigationUI: 'hide' }); if (p && p.catch) p.catch(function () {}); } catch (er) {}
     }
   });
+  // Bildschirm anlassen (Screen Wake Lock): beim Laden, nach jedem Zurückkommen auf die Seite und alle 15 s neu versuchen
+  var WL = null;
+  function wachHalten() {
+    try { if ('wakeLock' in navigator && !WL && document.visibilityState === 'visible')
+      navigator.wakeLock.request('screen').then(function (l) { WL = l; l.addEventListener('release', function () { WL = null; }); }).catch(function () {}); } catch (e) {}
+  }
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') wachHalten(); });
+  window.addEventListener('focus', wachHalten); window.addEventListener('pointerdown', wachHalten, true);
+  wachHalten(); setInterval(wachHalten, 15000);
+
 </script>
 </body>
 </html>
