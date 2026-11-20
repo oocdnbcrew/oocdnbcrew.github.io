@@ -73,8 +73,12 @@ WACH_JS = '''
       if (ist()) return;
       try { var p = f.call(el, { navigationUI: 'hide' }); if (p && p.catch) p.catch(function () {}); } catch (e) {}
     }
-    function zeig() { if (!ist() && !s.parentNode) d.body.appendChild(s); }
+    function zeig() { if (!aus && !ist() && !s.parentNode) d.body.appendChild(s); }
     s.addEventListener('click', an); s.addEventListener('pointerup', an); s.addEventListener('wheel', an);
+    // Finger statt Maus (auch Handys, die sich als PC ausgeben): Schicht SOFORT weg, nie Wischen/Scrollen blockieren
+    function finger(e) { if (e.type === 'touchstart' || (e.pointerType && e.pointerType !== 'mouse')) { aus = true; if (s.parentNode) s.parentNode.removeChild(s); } }
+    var aus = false;
+    s.addEventListener('touchstart', finger, { passive: true }); s.addEventListener('pointerdown', finger);
     d.addEventListener('keydown', function () { if (s.parentNode) an(); });
     d.addEventListener('fullscreenchange', function () { if (!ist()) setTimeout(zeig, 1500); });
     d.addEventListener('webkitfullscreenchange', function () { if (!ist()) setTimeout(zeig, 1500); });
