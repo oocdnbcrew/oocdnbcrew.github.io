@@ -62,6 +62,9 @@ WACH_JS = '''
   (function () {
     var d = document, el = d.documentElement, f = el.requestFullscreen || el.webkitRequestFullscreen;
     if (!f) return;
+    // 20.11. abends (Mike): am Handy hat die Schicht das Wischen/Scrollen geschluckt → nur an Geräten OHNE Touch (PC mit Maus).
+    // Am Handy schaltet die App selbst beim ersten Tipp ins Vollbild (Chrome Android lässt das aus dem Google-Rahmen zu).
+    if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) return;
     var s = d.createElement('div');
     s.style.cssText = 'position:fixed;inset:0;z-index:9;background:transparent;cursor:pointer';
     function ist() { return d.fullscreenElement || d.webkitFullscreenElement; }
@@ -71,7 +74,7 @@ WACH_JS = '''
       try { var p = f.call(el, { navigationUI: 'hide' }); if (p && p.catch) p.catch(function () {}); } catch (e) {}
     }
     function zeig() { if (!ist() && !s.parentNode) d.body.appendChild(s); }
-    s.addEventListener('click', an);
+    s.addEventListener('click', an); s.addEventListener('pointerup', an); s.addEventListener('wheel', an);
     d.addEventListener('keydown', function () { if (s.parentNode) an(); });
     d.addEventListener('fullscreenchange', function () { if (!ist()) setTimeout(zeig, 1500); });
     d.addEventListener('webkitfullscreenchange', function () { if (!ist()) setTimeout(zeig, 1500); });
