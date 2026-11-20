@@ -56,6 +56,27 @@ WACH_JS = '''
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') wachHalten(); });
   window.addEventListener('focus', wachHalten); window.addEventListener('pointerdown', wachHalten, true);
   wachHalten(); setInterval(wachHalten, 15000);
+  // 20.11.2026 (Mike): Vollbild automatisch. Browser erlauben Vollbild nur nach einem Tipp – und Firefox zählt Tipps im
+  // Google-Rahmen nicht. Darum fängt eine unsichtbare Schicht in DIESER Seite den ersten Tipp ab, schaltet Vollbild an
+  // und verschwindet. Verlässt jemand das Vollbild (Esc), macht der nächste Tipp es wieder an. iPhone kann kein Vollbild → keine Schicht.
+  (function () {
+    var d = document, el = d.documentElement, f = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (!f) return;
+    var s = d.createElement('div');
+    s.style.cssText = 'position:fixed;inset:0;z-index:9;background:transparent;cursor:pointer';
+    function ist() { return d.fullscreenElement || d.webkitFullscreenElement; }
+    function an() {
+      if (s.parentNode) s.parentNode.removeChild(s);
+      if (ist()) return;
+      try { var p = f.call(el, { navigationUI: 'hide' }); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+    }
+    function zeig() { if (!ist() && !s.parentNode) d.body.appendChild(s); }
+    s.addEventListener('click', an);
+    d.addEventListener('keydown', function () { if (s.parentNode) an(); });
+    d.addEventListener('fullscreenchange', function () { if (!ist()) setTimeout(zeig, 1500); });
+    d.addEventListener('webkitfullscreenchange', function () { if (!ist()) setTimeout(zeig, 1500); });
+    zeig();
+  })();
 '''
 SEITE = '''<!doctype html>
 <html lang="de">
